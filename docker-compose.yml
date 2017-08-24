@@ -1,0 +1,38 @@
+version: '2'
+
+services:
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: translator
+      MYSQL_USER: translator
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root_secret
+
+  install:
+    build:
+      context: .
+      dockerfile: Dockerfile-composer
+    command: install
+    volumes:
+      - ./:/app
+
+  migrate:
+    build: .
+    command: php artisan migrate --force
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  website:
+    build: .
+    ports:
+      - 80:8000
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - APP_DEBUG="true"
+      - APP_KEY="TanViffUckduempokairtyacHihibHat"
