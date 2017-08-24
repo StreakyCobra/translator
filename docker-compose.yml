@@ -4,6 +4,8 @@ services:
 
   db:
     image: mariadb
+    volumes:
+      - translator-db:/var/lib/mysql
     environment:
       MYSQL_DATABASE: translator
       MYSQL_USER: translator
@@ -36,3 +38,7 @@ services:
     environment:
       - APP_DEBUG="true"
       - APP_KEY="TanViffUckduempokairtyacHihibHat"
+
+volumes:
+  translator-db:
+    driver: local
